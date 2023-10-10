@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/listItemMListImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="12dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize12Percent" />
+
+    <TextView
+        android:id="@+id/listItemMListTitle"
+        style="@style/regularH3"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/main_white"
+        android:layout_alignTop="@+id/listItemMListImg"
+        android:layout_toEndOf="@+id/listItemMListImg"
+        android:fontFamily="@font/regular"/>
+
+    <TextView
+        android:id="@+id/listItemMListSinger"
+        style="@style/regularH4"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/listItemMListTitle"
+        android:layout_alignStart="@+id/listItemMListTitle"
+        android:fontFamily="@font/regular"
+        android:textColor="@color/sub_blue"/>
+
+</RelativeLayout>
