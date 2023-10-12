@@ -2,28 +2,23 @@ package app.music.poguen
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
-import java.io.ByteArrayOutputStream
+import app.music.poguen.DataTypeParser.sendImage
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: app.music.poguen.databinding.ActivityMainBinding
 
     companion object {
-        const val CM = "MY_PLAY_LIST"
-        const val CR = "RECOMMENDED"
-        const val CF = "FAVOURITE_ALBUM"
+        const val CM = "My Playlist"
+        const val CR = "Recommended"
+        const val CF = "Favourite Album"
     }
-
 
     private val myPlayListItem = ArrayList<AdapterModel.MusicItem>()
     private val cmItem = ArrayList<AdapterModel.MusicItem>()
@@ -37,7 +32,6 @@ class MainActivity : AppCompatActivity() {
     R.drawable.a5,R.drawable.a6,R.drawable.a7,R.drawable.a8)
 
     private var count = 0
-
     private var p = 0.0f
 
     @SuppressLint("NotifyDataSetChanged")
@@ -88,20 +82,20 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, PlayerActivity::class.java)
             intent.putExtra("title","We Need Our Army Back")
             intent.putExtra("singer","Haber Zomitor")
-            intent.putExtra("img", sendImage(R.drawable.a1))
+            intent.putExtra("img", sendImage(this,R.drawable.a1))
             this.startActivity(intent)
         }
 
         binding.mainMyPlaylistLayout.setOnClickListener {
-            intentListActivity(cmItem)
+            intentListActivity(CM,cmItem)
         }
 
         binding.mainRecommendLayout.setOnClickListener {
-            intentListActivity(crItem)
+            intentListActivity(CR,crItem)
         }
 
         binding.mainFavouriteLayout.setOnClickListener {
-            intentListActivity(cfItem)
+            intentListActivity(CF,cfItem)
         }
     }
 
@@ -116,6 +110,9 @@ class MainActivity : AppCompatActivity() {
                 p += 5
                 binding.mainBottomPlaying.setValue(p)
             }
+            if (count >= 7) {
+                count = 0
+            }
             changeProgress()
         },1000)
     }
@@ -124,24 +121,17 @@ class MainActivity : AppCompatActivity() {
         return ResourcesCompat.getDrawable(resources, i,null)
     }
 
-    fun getDrawableFromResource(@DrawableRes drawableResId: Int): Drawable? {
-        return AppCompatResources.getDrawable(this, drawableResId)
-    }
-
-    fun compareDrawables(drawable1: Drawable?, drawable2: Drawable?): Boolean {
-        return drawable1?.constantState == drawable2?.constantState
-    }
-
-    private fun intentListActivity(list: ArrayList<AdapterModel.MusicItem>) {
+    private fun intentListActivity(subject: String, list: ArrayList<AdapterModel.MusicItem>) {
         val intent = Intent(this, MusicListActivity::class.java)
         val titleArray = ArrayList<String>()
         val singerArray = ArrayList<String>()
-        val imgArray = ArrayList<String>()
+        val imgArray = ArrayList<Int>()
         list.forEach {
             titleArray.add(it.title)
             singerArray.add(it.singer)
-            imgArray.add(it.img.toString())
+            imgArray.add(it.img)
         }
+        intent.putExtra("subject",subject)
         intent.putExtra("titleList",titleArray)
         intent.putExtra("singerList",singerArray)
         intent.putExtra("imgList",imgArray)
@@ -152,13 +142,5 @@ class MainActivity : AppCompatActivity() {
         val item = AdapterModel.MusicItem(title, singer, img, category)
 
         myPlayListItem.add(item)
-    }
-
-    private fun sendImage(image: Int) : ByteArray {
-        val sendBitmap = BitmapFactory.decodeResource(resources, image)
-        val stream = ByteArrayOutputStream()
-        sendBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-
-        return stream.toByteArray()
     }
 }

@@ -1,19 +1,15 @@
 package app.music.poguen
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import java.io.ByteArrayOutputStream
 
 class MusicListAdapter(
     private val context: Activity,
@@ -21,6 +17,15 @@ class MusicListAdapter(
 ) :
     RecyclerView.Adapter<MusicListAdapter.ViewHolder>() {
     private val mList = list
+
+    private lateinit var onClickListener: OnItemClickListener
+
+    interface OnItemClickListener {
+        fun onItemClick(v: View, position: Int)
+    }
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onClickListener = listener
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -48,28 +53,38 @@ class MusicListAdapter(
             singer.text = dao.singer
             Glide.with(context).load(dao.img).into(img)
 
+//            itemView.setOnClickListener {
+//                val position = adapterPosition
+//
+//                if (position != RecyclerView.NO_POSITION) {
+//                    try {
+//                        val intent = Intent(context, PlayerActivity::class.java)
+//                        intent.putExtra("title", dao.title)
+//                        intent.putExtra("singer", dao.singer)
+//                        intent.putExtra("img", sendImage(context,dao.img.toString()))
+//                        context.startActivity(intent)
+//                    } catch (e: Exception) {
+//                        e.printStackTrace()
+//                    }
+//                }
+//            }
             itemView.setOnClickListener {
                 val position = adapterPosition
 
                 if (position != RecyclerView.NO_POSITION) {
-                    try {
-                        val intent = Intent(context, PlayerActivity::class.java)
-                        intent.putExtra("title", dao.title)
-                        intent.putExtra("singer", dao.singer)
-                        intent.putExtra("img", sendImage(dao.img.toString()))
-                        context.startActivity(intent)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    onClickListener.onItemClick(it, position)
                 }
             }
         }
     }
 
-    fun sendImage(image: String) : ByteArray {
-        val sendBitmap = BitmapFactory.decodeResource(context.resources, image.toInt())
-        val stream = ByteArrayOutputStream()
-        sendBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        return stream.toByteArray()
+    @SuppressLint("NotifyDataSetChanged")
+    fun changeClicked(p: Int, b: Boolean) {
+        mList[p].clicked = b
+        notifyDataSetChanged()
+    }
+
+    fun getClicked(p: Int): Boolean {
+        return mList[p].clicked
     }
 }

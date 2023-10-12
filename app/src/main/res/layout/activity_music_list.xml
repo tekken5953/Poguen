@@ -5,14 +5,14 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MusicListActivity"
-        android:background="@drawable/main_bg">
+        tools:context=".MusicListActivity">
 
         <ImageView
             android:id="@+id/mListBack"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/back"
+            android:padding="2dp"
+            android:src="@drawable/arrow_left"
             app:tint="@color/main_white"
             android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
@@ -39,6 +39,47 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="10dp"
             android:padding="7dp"/>
+
+        <LinearLayout
+            android:id="@+id/mListBottomMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#70000000"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:visibility="gone"
+            android:weightSum="1"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <app.music.poguen.CustomListBottomView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:customSrc="1"
+                android:gravity="center_horizontal"
+                app:customTitle="재생하기"
+                android:layout_weight="0.25"/>
+            <app.music.poguen.CustomListBottomView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:customSrc="2"
+                android:gravity="center_horizontal"
+                app:customTitle="담기"
+                android:layout_weight="0.25"/>
+            <app.music.poguen.CustomListBottomView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:customSrc="3"
+                android:gravity="center_horizontal"
+                app:customTitle="추가하기"
+                android:layout_weight="0.25"/>
+            <app.music.poguen.CustomListBottomView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:customSrc="4"
+                android:gravity="center_horizontal"
+                app:customTitle="다운로드"
+                android:layout_weight="0.25"/>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

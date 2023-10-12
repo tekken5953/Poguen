@@ -15,6 +15,7 @@
     <color name="back_filter">#10FFFFFF</color>
 
     <color name="ripple_color">#B4cccccc</color>
+    <color name="checked_color">#40FFFFFF</color>
 
     <color name="sub_blue">#d5e1ff</color>
 </resources>

@@ -1,16 +1,13 @@
 package app.music.poguen
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toDrawable
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import app.music.poguen.DataTypeParser.getImage
+import app.music.poguen.DataTypeParser.sendImage
 import app.music.poguen.databinding.ActivityMusicListBinding
-import java.io.ByteArrayOutputStream
 
 class MusicListActivity : AppCompatActivity() {
 
@@ -19,6 +16,8 @@ class MusicListActivity : AppCompatActivity() {
     private val musicList = ArrayList<AdapterModel.ListItem>()
     private val musicAdapter by lazy {MusicListAdapter(this, musicList)}
 
+    private var count = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_music_list)
@@ -26,35 +25,42 @@ class MusicListActivity : AppCompatActivity() {
 
         binding.mListRv.adapter = musicAdapter
 
+        binding.mListTitle.text = intent.extras?.getString("subject")
+
         val titleArray = intent.extras?.getStringArrayList("titleList")
         val singerArray = intent.extras?.getStringArrayList("singerList")
-        val imgArray = intent.extras?.getStringArrayList("imgList")
+        val imgArray = intent.extras?.getIntegerArrayList("imgList")
 
         repeat(titleArray?.size ?: 0) {
             addMusicList(
                 titleArray?.get(it) ?: "", singerArray?.get(it) ?: "",
-                getImage(sendImage(imgArray?.get(it)?.toInt() ?: 0)))
+                getImage(this, sendImage(this, imgArray?.get(it) ?: 0)))
 
             musicAdapter.notifyItemInserted(it)
         }
+
+
+        musicAdapter.setOnItemClickListener(object : MusicListAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, position: Int) {
+                if (!musicAdapter.getClicked(position)) {
+                    count++
+                    musicAdapter.changeClicked(position,true)
+                    v.setBackgroundColor(getColor(R.color.checked_color))
+                    binding.mListBottomMenu.visibility = View.VISIBLE
+                } else {
+                    musicAdapter.changeClicked(position,false)
+                    v.setBackgroundColor(getColor(android.R.color.transparent))
+                    if (--count == 0) {
+                        binding.mListBottomMenu.visibility = View.GONE
+                    }
+                }
+            }
+        })
     }
 
     private fun addMusicList(title: String, singer: String, img: Drawable) {
-        val item = AdapterModel.ListItem(title, singer, img)
+        val item = AdapterModel.ListItem(title, singer, img, false)
 
         musicList.add(item)
-    }
-
-
-    private fun sendImage(image: Int) : ByteArray {
-        val sendBitmap = BitmapFactory.decodeResource(resources, image)
-        val stream = ByteArrayOutputStream()
-        sendBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-
-        return stream.toByteArray()
-    }
-
-    private fun getImage(arr: ByteArray) : Drawable {
-        return BitmapFactory.decodeByteArray(arr ,0, arr.size).toDrawable(resources)
     }
 }

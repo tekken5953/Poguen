@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".MusicListActivity">
+
+        <ImageView
+            android:id="@+id/mListBottomPlayImg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            app:tint="@color/main_white"/>
+        <TextView
+            android:id="@+id/mListBottomPlayText"
+            style="@style/regularH5"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/regular"
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/main_white"
+            android:layout_below="@+id/mListBottomPlayImg"/>
+
+    </RelativeLayout>
+</layout>

@@ -14,7 +14,7 @@
             style="@style/boldTitle"
             android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
-            android:text="Music"
+            android:text="Discover"
             android:textColor="@color/main_white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

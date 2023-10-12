@@ -13,6 +13,7 @@ object AdapterModel {
     data class ListItem(
         val title: String,
         val singer: String,
-        val img: Drawable
+        val img: Drawable,
+        var clicked: Boolean
     )
 }
